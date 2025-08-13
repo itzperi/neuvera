@@ -19,7 +19,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -43,13 +43,17 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onToggleMode }) => {
     }
 
     try {
-      // In a real app, this would create a new account
-      // For demo, we'll just log them in with the username
-      const success = await login(formData.username, formData.password);
+      const success = await register(formData.username, formData.password);
       if (success) {
         toast({
           title: "Account created!",
-          description: "Welcome to our platform!",
+          description: "Welcome to NeuraChat!",
+        });
+      } else {
+        toast({
+          title: "Registration failed",
+          description: "Username might already exist. Please try a different one.",
+          variant: "destructive",
         });
       }
     } catch (error) {

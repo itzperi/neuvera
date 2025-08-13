@@ -2,7 +2,8 @@ import React from 'react';
 import { Bot, User } from 'lucide-react';
 
 export interface Message {
-  id: string;
+  id: number;
+  userId: string;
   content: string;
   isUser: boolean;
   timestamp: Date;
@@ -41,7 +42,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message, isTyping }) =
           )}
         </div>
         <p className="text-xs text-muted-foreground mt-1 px-1">
-          {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </p>
       </div>
 

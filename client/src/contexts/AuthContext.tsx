@@ -1,13 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiRequest } from '@/lib/queryClient';
 
 interface User {
+  id: number;
   username: string;
   isAdmin: boolean;
+  createdAt: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (username: string, password: string) => Promise<boolean>;
+  register: (username: string, password: string, isAdmin?: boolean) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -34,23 +38,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {
-    // Admin credentials
-    if (username === 'neuvera' && password === '1234') {
-      const adminUser = { username, isAdmin: true };
-      setUser(adminUser);
-      localStorage.setItem('chatbot_user', JSON.stringify(adminUser));
-      return true;
+    try {
+      const response = await apiRequest('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.success && response.user) {
+        setUser(response.user);
+        localStorage.setItem('chatbot_user', JSON.stringify(response.user));
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Login failed:', error);
+      return false;
     }
-    
-    // Regular user login (for demo purposes, accept any other credentials)
-    if (username && password) {
-      const regularUser = { username, isAdmin: false };
-      setUser(regularUser);
-      localStorage.setItem('chatbot_user', JSON.stringify(regularUser));
-      return true;
+  };
+
+  const register = async (username: string, password: string, isAdmin: boolean = false): Promise<boolean> => {
+    try {
+      const response = await apiRequest('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ username, password, isAdmin }),
+      });
+
+      if (response.success && response.user) {
+        setUser(response.user);
+        localStorage.setItem('chatbot_user', JSON.stringify(response.user));
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Registration failed:', error);
+      return false;
     }
-    
-    return false;
   };
 
   const logout = () => {
@@ -61,6 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const value = {
     user,
     login,
+    register,
     logout,
     isAuthenticated: !!user,
   };
