@@ -6,6 +6,7 @@ import { AdminPanel } from '@/components/admin/AdminPanel';
 import { useAuth } from '@/contexts/AuthContext';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
+import { trackingClient } from '@/lib/trackingClient';
 import type { Message } from '@/components/chat/ChatMessage';
 
 // Sample AI responses
@@ -53,6 +54,12 @@ export const ChatPage: React.FC = () => {
   const handleSendMessage = useCallback(async (content: string) => {
     if (!user) return;
 
+    // Track chat interaction
+    trackingClient.trackChatInteraction({
+      messageLength: content.length,
+      type: 'user_message',
+    });
+
     // Create user message
     const userMessageData = {
       userId: user.id.toString(),
@@ -61,31 +68,24 @@ export const ChatPage: React.FC = () => {
     };
 
     try {
-      // Save user message to database
-      await createMessageMutation.mutateAsync(userMessageData);
-      setIsTyping(true);
+      // Save user message and get AI response
+      const startTime = Date.now();
+      const response = await createMessageMutation.mutateAsync(userMessageData);
+      const responseTime = Date.now() - startTime;
 
-      // Simulate AI response delay
-      setTimeout(async () => {
-        const aiMessageData = {
-          userId: user.id.toString(),
-          content: generateAIResponse(),
-          isUser: false,
-        };
-
-        try {
-          await createMessageMutation.mutateAsync(aiMessageData);
-        } catch (error) {
-          console.error('Failed to save AI message:', error);
-        }
-        
-        setIsTyping(false);
-      }, 1500 + Math.random() * 1000); // Random delay between 1.5-2.5 seconds
+      // Track AI response if available
+      if (response.aiMessage) {
+        trackingClient.trackChatInteraction({
+          responseTime,
+          messageLength: response.aiMessage.content.length,
+          type: 'ai_response',
+        });
+      }
     } catch (error) {
-      console.error('Failed to save user message:', error);
-      setIsTyping(false);
+      console.error('Failed to send message:', error);
+      trackingClient.trackEvent('chat_error', { error: error.message });
     }
-  }, [generateAIResponse, createMessageMutation, user]);
+  }, [createMessageMutation, user]);
 
   return (
     <div className="h-screen flex flex-col bg-background">
