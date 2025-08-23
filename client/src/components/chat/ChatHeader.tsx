@@ -1,5 +1,5 @@
 import React from 'react';
-import { Moon, Sun, Settings, LogOut, User } from 'lucide-react';
+import { ArrowLeft, MoreHorizontal, Moon, Sun, Settings, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,41 +13,34 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onOpenSettings }) => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="bg-card border-b border-border px-6 py-4 flex items-center justify-between shadow-elegant">
+    <header className="bg-background/80 backdrop-blur-md border-b border-border/50 px-4 py-3 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        {/* Logo/Brand */}
-        <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center shadow-glow">
-          <div className="w-6 h-6 bg-primary-foreground rounded-sm"></div>
-        </div>
-        <div>
-          <h1 className="text-xl font-bold text-foreground">NeuraChat</h1>
-          <p className="text-sm text-muted-foreground">AI Assistant</p>
+        <Button variant="ghost" size="sm" className="p-2 lg:hidden">
+          <ArrowLeft size={18} className="text-foreground" />
+        </Button>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-glow rounded-full flex items-center justify-center shadow-md">
+            <div className="w-4 h-4 bg-white rounded-full"></div>
+          </div>
+          <div>
+            <h1 className="text-lg font-semibold text-foreground">NeuraChat AI</h1>
+            <p className="text-xs text-muted-foreground hidden sm:block">Mental wellness support</p>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* User info */}
-        <div className="flex items-center gap-2 px-3 py-2 bg-muted/30 rounded-lg">
-          <User size={16} className="text-muted-foreground" />
-          <span className="text-sm font-medium text-foreground">{user?.username}</span>
-          {user?.isAdmin && (
-            <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-md">
-              ADMIN
-            </span>
-          )}
-        </div>
-
+      <div className="flex items-center gap-1">
         {/* Theme toggle */}
         <Button
           variant="ghost"
-          size="icon"
+          size="sm"
           onClick={toggleTheme}
-          className="hover:bg-muted transition-colors"
+          className="p-2 hover:bg-muted/50 transition-colors"
         >
           {theme === 'dark' ? (
-            <Sun size={20} className="text-foreground" />
+            <Sun size={18} className="text-foreground" />
           ) : (
-            <Moon size={20} className="text-foreground" />
+            <Moon size={18} className="text-foreground" />
           )}
         </Button>
 
@@ -55,22 +48,21 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onOpenSettings }) => {
         {user?.isAdmin && (
           <Button
             variant="ghost"
-            size="icon"
+            size="sm"
             onClick={onOpenSettings}
-            className="hover:bg-muted transition-colors"
+            className="p-2 hover:bg-muted/50 transition-colors"
           >
-            <Settings size={20} className="text-foreground" />
+            <Settings size={18} className="text-foreground" />
           </Button>
         )}
 
-        {/* Logout */}
+        {/* More options */}
         <Button
           variant="ghost"
-          size="icon"
-          onClick={logout}
-          className="hover:bg-destructive/20 hover:text-destructive transition-colors"
+          size="sm"
+          className="p-2 hover:bg-muted/50 transition-colors"
         >
-          <LogOut size={20} />
+          <MoreHorizontal size={18} className="text-foreground" />
         </Button>
       </div>
     </header>

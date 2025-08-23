@@ -47,62 +47,77 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled })
   };
 
   return (
-    <div className="bg-card border-t border-border px-6 py-4 shadow-elegant">
-      <form onSubmit={handleSubmit} className="flex gap-3 items-end">
-        <div className="flex-1 relative">
-          <Textarea
-            ref={textareaRef}
-            value={message}
-            onChange={handleTextareaChange}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask me anything..."
-            disabled={disabled}
-            className="min-h-[52px] max-h-[120px] resize-none bg-muted/50 border-border focus:border-primary transition-colors pr-16 py-4 rounded-2xl"
-            rows={1}
-          />
-          
-          {/* Voice recording button */}
-          <Button
-            type="button"
-            variant="voice"
-            size="icon"
-            onClick={toggleVoiceRecording}
-            className={`absolute right-2 top-1/2 transform -translate-y-1/2 ${
-              isListening ? 'animate-glow-pulse' : ''
-            }`}
-          >
-            {isListening ? <MicOff size={20} /> : <Mic size={20} />}
-          </Button>
-        </div>
+    <div className="bg-background border-t border-border/50 px-4 py-4">
+      <form onSubmit={handleSubmit} className="flex gap-3 items-end max-w-4xl mx-auto">
+        {message.length === 0 ? (
+          /* Voice-first input when no text */
+          <div className="flex-1 flex items-center justify-center">
+            <Button
+              type="button"
+              onClick={toggleVoiceRecording}
+              className={`w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary-glow text-white shadow-lg hover:shadow-xl transition-all duration-200 ${
+                isListening ? 'scale-110 shadow-2xl' : ''
+              }`}
+            >
+              {isListening ? <MicOff size={24} /> : <Mic size={24} />}
+            </Button>
+          </div>
+        ) : (
+          /* Text input with inline voice button */
+          <div className="flex-1 relative">
+            <Textarea
+              ref={textareaRef}
+              value={message}
+              onChange={handleTextareaChange}
+              onKeyPress={handleKeyPress}
+              placeholder="Type your message..."
+              disabled={disabled}
+              className="min-h-[48px] max-h-[120px] resize-none bg-muted/30 border-border/50 focus:border-primary/50 transition-colors pr-12 py-3 rounded-2xl text-sm"
+              rows={1}
+            />
+            
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={toggleVoiceRecording}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2"
+            >
+              <Mic size={16} className="text-muted-foreground" />
+            </Button>
+          </div>
+        )}
 
-        <Button
-          type="submit"
-          variant="premium"
-          size="icon"
-          disabled={!message.trim() || disabled}
-          className="h-[52px] w-[52px] rounded-2xl flex-shrink-0"
-        >
-          <Send size={20} />
-        </Button>
+        {message.trim() && (
+          <Button
+            type="submit"
+            disabled={!message.trim() || disabled}
+            className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary-glow text-white shadow-lg hover:shadow-xl transition-all duration-200 flex-shrink-0"
+          >
+            <Send size={18} />
+          </Button>
+        )}
       </form>
 
-      {/* Quick suggestions */}
-      <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
-        {[
-          "What can you help me with?",
-          "Tell me a joke",
-          "How's the weather?",
-          "Help me brainstorm ideas"
-        ].map((suggestion, index) => (
-          <button
-            key={index}
-            onClick={() => setMessage(suggestion)}
-            className="flex-shrink-0 px-3 py-2 text-sm bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground rounded-lg transition-colors border border-border hover:border-primary/50"
+      {/* Quick action buttons - only show when no message */}
+      {message.length === 0 && (
+        <div className="flex gap-3 mt-4 max-w-4xl mx-auto justify-center flex-wrap">
+          <Button
+            onClick={() => setMessage("How can I help you today?")}
+            className="bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 rounded-2xl px-6 py-3 text-sm font-medium transition-colors"
+            variant="outline"
           >
-            {suggestion}
-          </button>
-        ))}
-      </div>
+            💬 Chat with bot
+          </Button>
+          <Button
+            onClick={() => setMessage("I'm feeling stressed today")}
+            className="bg-secondary/10 hover:bg-secondary/20 text-secondary border-secondary/20 rounded-2xl px-6 py-3 text-sm font-medium transition-colors"
+            variant="outline"
+          >
+            🧠 Talk with bot
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

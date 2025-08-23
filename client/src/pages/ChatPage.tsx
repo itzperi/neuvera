@@ -88,7 +88,7 @@ export const ChatPage: React.FC = () => {
   }, [createMessageMutation, user]);
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-screen chat-container flex flex-col bg-background">
       <ChatHeader onOpenSettings={() => setIsAdminPanelOpen(true)} />
       <ChatArea messages={messages} isTyping={isTyping} />
       <ChatInput onSendMessage={handleSendMessage} disabled={isTyping} />
