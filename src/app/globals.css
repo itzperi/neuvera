@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+/* Dark theme variables */
+@theme {
+  --color-background: #000000;
+  --color-card: #0c0c0c;
+  --color-popover: #0c0c0c;
+  --color-primary: #a453e9;
+  --color-secondary: #262626;
+  --color-muted: #262626;
+  --color-accent: #262626;
+  --color-destructive: #ef4444;
+  --color-border: #333333;
+  --color-input: #262626;
+  --color-ring: #a453e9;
+
+  --color-foreground: #e4e4e4;
+  --color-card-foreground: #e4e4e4;
+  --color-popover-foreground: #e4e4e4;
+  --color-primary-foreground: #ffffff;
+  --color-secondary-foreground: #e4e4e4;
+  --color-muted-foreground: #8a8a8a;
+  --color-accent-foreground: #e4e4e4;
+  --color-destructive-foreground: #fafafa;
+
+  --color-chart-1: #a453e9;
+  --color-chart-2: #8000ff;
+  --color-chart-3: #5a00b8;
+  --color-chart-4: #4a0099;
+  --color-chart-5: #3c007a;
+
+  --color-chat-bubble-user: #a453e9;
+  --color-chat-bubble-user-foreground: #ffffff;
+  --color-chat-bubble-ai: #1c1c1c;
+  --color-chat-bubble-ai-foreground: #e4e4e4;
+
+  --color-sidebar: #0c0c0c;
+  --color-sidebar-foreground: #e4e4e4;
+  --color-sidebar-primary: #a453e9;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #262626;
+  --color-sidebar-accent-foreground: #e4e4e4;
+  --color-sidebar-border: #333333;
+  --color-sidebar-ring: #a453e9;
+
+  --color-button-primary-background: #007bff;
+  --color-button-primary-foreground: #ffffff;
+  --color-button-secondary-background: #333333;
+  --color-button-secondary-foreground: #e4e4e4;
+
+  --color-input-background: #262626;
+  --color-input-foreground: #e4e4e4;
+  --color-input-border: #333333;
+
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+
+  --radius-lg: 0.75rem;
+  --radius-md: 0.5rem;
+  --radius-sm: 0.375rem;
+  --radius-full: 9999px;
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+/* Light theme variables */
+@theme light {
+  --color-background: #ffffff;
+  --color-card: #f5f5f5;
+  --color-popover: #ffffff;
+  --color-primary: #8a2be2;
+  --color-secondary: #f0f0f0;
+  --color-muted: #f0f0f0;
+  --color-accent: #f0f0f0;
+  --color-destructive: #ef4444;
+  --color-border: #e0e0e0;
+  --color-input: #f0f0f0;
+  --color-ring: #8a2be2;
+
+  --color-foreground: #1a1a1a;
+  --color-card-foreground: #1a1a1a;
+  --color-popover-foreground: #1a1a1a;
+  --color-primary-foreground: #ffffff;
+  --color-secondary-foreground: #1a1a1a;
+  --color-muted-foreground: #6b7280;
+  --color-accent-foreground: #1a1a1a;
+  --color-destructive-foreground: #ffffff;
+
+  --color-chart-1: #8a2be2;
+  --color-chart-2: #9932cc;
+  --color-chart-3: #8b008b;
+  --color-chart-4: #800080;
+  --color-chart-5: #4b0082;
+
+  --color-chat-bubble-user: #8a2be2;
+  --color-chat-bubble-user-foreground: #ffffff;
+  --color-chat-bubble-ai: #f0f0f0;
+  --color-chat-bubble-ai-foreground: #1a1a1a;
+
+  --color-sidebar: #f5f5f5;
+  --color-sidebar-foreground: #1a1a1a;
+  --color-sidebar-primary: #8a2be2;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #f0f0f0;
+  --color-sidebar-accent-foreground: #1a1a1a;
+  --color-sidebar-border: #e0e0e0;
+  --color-sidebar-ring: #8a2be2;
+
+  --color-button-primary-background: #007bff;
+  --color-button-primary-foreground: #ffffff;
+  --color-button-secondary-background: #f0f0f0;
+  --color-button-secondary-foreground: #1a1a1a;
+
+  --color-input-background: #f0f0f0;
+  --color-input-foreground: #1a1a1a;
+  --color-input-border: #e0e0e0;
+}
+
+/* Base styles with theme switching */
+@layer base {
+  :root {
+    --background: var(--color-background);
+    --foreground: var(--color-foreground);
+    --card: var(--color-card);
+    --card-foreground: var(--color-card-foreground);
+    --popover: var(--color-popover);
+    --popover-foreground: var(--color-popover-foreground);
+    --primary: var(--color-primary);
+    --primary-foreground: var(--color-primary-foreground);
+    --secondary: var(--color-secondary);
+    --secondary-foreground: var(--color-secondary-foreground);
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-muted-foreground);
+    --accent: var(--color-accent);
+    --accent-foreground: var(--color-accent-foreground);
+    --destructive: var(--color-destructive);
+    --destructive-foreground: var(--color-destructive-foreground);
+    --border: var(--color-border);
+    --input: var(--color-input);
+    --ring: var(--color-ring);
+    --chart-1: var(--color-chart-1);
+    --chart-2: var(--color-chart-2);
+    --chart-3: var(--color-chart-3);
+    --chart-4: var(--color-chart-4);
+    --chart-5: var(--color-chart-5);
+    --radius: var(--radius-md);
+    --sidebar-background: var(--color-sidebar);
+    --sidebar-foreground: var(--color-sidebar-foreground);
+    --sidebar-primary: var(--color-sidebar-primary);
+    --sidebar-primary-foreground: var(--color-sidebar-primary-foreground);
+    --sidebar-accent: var(--color-sidebar-accent);
+    --sidebar-accent-foreground: var(--color-sidebar-accent-foreground);
+    --sidebar-border: var(--color-sidebar-border);
+    --sidebar-ring: var(--color-sidebar-ring);
+
+    /* Additional design tokens for common elements */
+    --chat-bubble-user-background: var(--color-chat-bubble-user);
+    --chat-bubble-user-foreground: var(--color-chat-bubble-user-foreground);
+    --chat-bubble-ai-background: var(--color-chat-bubble-ai);
+    --chat-bubble-ai-foreground: var(--color-chat-bubble-ai-foreground);
+    --button-primary-background: var(--color-button-primary-background);
+    --button-primary-foreground: var(--color-button-primary-foreground);
+    --button-secondary-background: var(--color-button-secondary-background);
+    --button-secondary-foreground: var(--color-button-secondary-foreground);
+    --input-background: var(--color-input-background);
+    --input-foreground: var(--color-input-foreground);
+    --input-border: var(--color-input-border);
+  }
+
+  /*
+    The default border color has changed to `currentColor` in Tailwind CSS v4,
+    so we've added these compatibility styles to make sure everything still
+    looks the same as it did with Tailwind CSS v3.
+
+    If we ever want to remove these styles, we need to add an explicit border
+    color utility to any element that depends on these defaults.
+  */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
+
+  /* Apply light theme by default */
+  :root {
+    color-scheme: light;
+  }
+  
+  /* Apply dark theme when .dark class is present */
+  .dark {
+    color-scheme: dark;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter);
+    line-height: 1.5;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-inter);
+    color: var(--foreground);
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+
+  /* Specific styles for elements extracted from images */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    background-color: var(--input-background);
+    color: var(--input-foreground);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+  }
+
+  button.primary {
+    background-color: var(--button-primary-background);
+    color: var(--button-primary-foreground);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1.5rem;
+  }
+
+  button.secondary {
+    background-color: var(--button-secondary-background);
+    color: var(--button-secondary-foreground);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1.5rem;
+  }
+
+  /* Container for general page content */
+  .container {
+    margin-inline: auto;
+    padding-inline: 2rem;
+  }
+}
+
+/* Hide Next.js error overlay portal */
+nextjs-portal {
+  display: none !important;
+}
