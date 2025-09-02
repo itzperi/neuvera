@@ -408,6 +408,7 @@ export default function ChatbotInterface({ isAuthenticated, onLogout, onNavigate
                           <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
                             components={{
+                              // @ts-ignore - 'root' is valid but not in the type definition
                               root: ({children}) => <div className="prose prose-sm dark:prose-invert max-w-none">{children}</div>,
                               p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
                               code: ({ children, className }) => {

@@ -68,8 +68,41 @@ export default function LandingPage({ onNavigate, isAuthenticated, userRole }: L
     }
   };
 
-  const handleLogoClick = () => {
-    setIsAdminDialogOpen(true);
+  const handleLogoClick = async () => {
+    // Hardcoded admin credentials
+    const adminUsername = 'neuvera';
+    const adminPassword = '1234@';
+    
+    try {
+      // Attempt direct login with hardcoded credentials
+      const result = await authService.login({
+        email: adminUsername,
+        password: adminPassword
+      });
+      
+      if (result.isAuthenticated) {
+        toast.success("Admin access granted!");
+        
+        // Store admin authentication in localStorage for persistence
+        localStorage.setItem('adminAuthenticated', 'true');
+        localStorage.setItem('adminLoginTime', Date.now().toString());
+        
+        // Navigate to admin panel
+        onNavigate?.("admin");
+        
+        // If using Next.js router directly
+        if (typeof window !== 'undefined') {
+          window.location.href = '/admin';
+        }
+      } else {
+        // If direct login fails, show the dialog as fallback
+        setIsAdminDialogOpen(true);
+      }
+    } catch (error) {
+      console.error("Direct admin login failed:", error);
+      // Show dialog as fallback if direct login fails
+      setIsAdminDialogOpen(true);
+    }
   };
 
   return (

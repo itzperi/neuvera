@@ -16,12 +16,11 @@ export async function POST(request: NextRequest) {
     }
     
     // Get IP address and headers for additional context
-    const headersList = headers();
+    const headersList = await headers();
     const userAgent = headersList.get('user-agent') || 'Unknown';
     const referer = headersList.get('referer') || 'Unknown';
     const ip = request.headers.get('x-forwarded-for') || 
               request.headers.get('x-real-ip') || 
-              request.ip || 
               'Unknown';
     
     // Process each event
