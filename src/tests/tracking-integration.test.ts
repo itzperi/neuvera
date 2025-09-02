@@ -1,12 +1,10 @@
-import { TrackingDataService } from '../services/tracking-data-service';
-import { AuthService } from '../services/auth-service';
+import { trackingDataService } from '../services/tracking-data-service';
+import { authService } from '../services/auth-service';
 
 // Mock fetch for testing
 global.fetch = jest.fn();
 
 describe('Tracking Integration Tests', () => {
-  const trackingDataService = new TrackingDataService();
-  const authService = new AuthService();
   
   beforeEach(() => {
     // Reset mocks before each test

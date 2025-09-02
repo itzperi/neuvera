@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import LandingPage from "@/components/landing-page";
 import AuthForms from "@/components/auth-forms";
@@ -10,6 +10,14 @@ import TrackingPixel from "@/components/tracking-pixel";
 import { useAuth } from "@clerk/nextjs";
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
+function HomePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentView, setCurrentView] = useState<string>("landing");

@@ -291,9 +291,9 @@ export default function TrackingDashboard() {
                   <div className="h-[300px]">
                     <LineChart
                       data={[
-                        { name: 'Page Views', data: stats.eventsByType.find(e => e.type === 'page_view')?.count || 0 },
-                        { name: 'Clicks', data: stats.eventsByType.find(e => e.type === 'click')?.count || 0 },
-                        { name: 'Form Submits', data: stats.eventsByType.find(e => e.type === 'form_submit')?.count || 0 },
+                        { name: 'Page Views', value: stats.eventsByType.find(e => e.type === 'page_view')?.count || 0 },
+                        { name: 'Clicks', value: stats.eventsByType.find(e => e.type === 'click')?.count || 0 },
+                        { name: 'Form Submits', value: stats.eventsByType.find(e => e.type === 'form_submit')?.count || 0 },
                       ]}
                     />
                   </div>
@@ -541,10 +541,10 @@ export default function TrackingDashboard() {
                   {pageViews.map((pageView) => (
                     <TableRow key={pageView.id}>
                       <TableCell className="max-w-xs truncate">{pageView.url}</TableCell>
-                      <TableCell>{pageView.title}</TableCell>
+                      <TableCell>{new URL(pageView.url).pathname}</TableCell>
                       <TableCell>1</TableCell>
-                      <TableCell>{pageView.timeOnPage ? `${pageView.timeOnPage}s` : '-'}</TableCell>
-                      <TableCell className="max-w-xs truncate">{pageView.referrer}</TableCell>
+                      <TableCell>{pageView.duration ? `${pageView.duration}s` : '-'}</TableCell>
+                      <TableCell className="max-w-xs truncate">{pageView.referrer || '-'}</TableCell>
                       <TableCell>{format(new Date(pageView.timestamp), 'MMM dd, HH:mm')}</TableCell>
                     </TableRow>
                   ))}
@@ -601,7 +601,7 @@ export default function TrackingDashboard() {
                                 <span className="text-muted-foreground">Session:</span> {event.sessionId}
                               </div>
                               <div>
-                                <span className="text-muted-foreground">Action:</span> {event.action}
+                                <span className="text-muted-foreground">Action:</span> {event.type}
                               </div>
                             </div>
                             {event.metadata && Object.keys(event.metadata).length > 0 && (
