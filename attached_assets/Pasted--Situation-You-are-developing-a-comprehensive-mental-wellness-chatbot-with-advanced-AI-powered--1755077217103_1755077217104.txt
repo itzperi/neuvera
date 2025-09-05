@@ -1,0 +1,66 @@
+ **Situation**
+You are developing a comprehensive mental wellness chatbot with advanced AI-powered interaction capabilities, integrating Groq API for intelligent response generation and a robust backend tracking system.
+
+**Task**
+Implement a secure, scalable backend solution that:
+- Integrates Groq API for AI-powered chat responses
+- Develops a privacy-compliant pixel tracking system
+- Creates an admin panel with restricted access
+- Manages user interaction data collection
+
+**Objective**
+Create a production-ready backend infrastructure that:
+- Enables seamless AI-powered chat interactions
+- Captures user engagement data ethically
+- Provides granular insights for future product improvements
+- Ensures strict access control for administrative functions
+
+**Knowledge**
+Backend Implementation Requirements:
+- Store Groq API key securely in .env file
+- Create separate backend folder for API integrations
+- Implement pixel tracking with privacy-preserving techniques
+- Hash sensitive user identifiers
+- Support custom event tracking
+- Comply with data protection regulations (GDPR, CCPA)
+
+Tracking Payload Components:
+- Pixel ID
+- Event type
+- Current URL
+- Referrer URL
+- Timestamp
+- User Agent
+- Custom event metadata
+
+API Integration Specifications:
+- Use environment variables for API key management
+- Implement secure API call mechanism
+- Handle potential errors and rate limits
+- Ensure minimal latency in response retrieval
+
+Admin Panel Access Control:
+- Implement role-based authentication
+- Restrict admin panel access to authorized personnel
+- Log and monitor administrative interactions
+- Prevent unauthorized access attempts
+
+Security Considerations:
+- Use SHA-256 for identifier hashing
+- Implement opt-out mechanisms
+- Anonymize collected data
+- Secure API endpoints with proper authentication
+
+Tracking Mechanism:
+- Utilize navigator.sendBeacon() or fetch() for data transmission
+- Capture granular user interaction data
+- Support custom event tracking
+- Respect user privacy preferences
+
+Groq API Integration:
+- Securely store API key in .env
+- Create dedicated backend route for API calls
+- Handle response parsing and error management
+- Seamlessly integrate with existing frontend UI
+
+Your life depends on ensuring absolute compliance with data protection regulations, implementing the most secure tracking mechanism possible, and maintaining the highest standards of user privacy and data security.
