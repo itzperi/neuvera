@@ -541,7 +541,18 @@ export default function TrackingDashboard() {
                   {pageViews.map((pageView) => (
                     <TableRow key={pageView.id}>
                       <TableCell className="max-w-xs truncate">{pageView.url}</TableCell>
-                      <TableCell>{new URL(pageView.url).pathname}</TableCell>
+                      <TableCell>
+                        {(() => {
+                          try {
+                            // Try to create a URL object - if it's a relative path, it will fail
+                            const url = new URL(pageView.url);
+                            return url.pathname;
+                          } catch {
+                            // If it's a relative path, just use it as is
+                            return pageView.url.startsWith('/') ? pageView.url : `/${pageView.url}`;
+                          }
+                        })()}
+                      </TableCell>
                       <TableCell>1</TableCell>
                       <TableCell>{pageView.duration ? `${pageView.duration}s` : '-'}</TableCell>
                       <TableCell className="max-w-xs truncate">{pageView.referrer || '-'}</TableCell>

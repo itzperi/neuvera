@@ -14,14 +14,14 @@ export interface ChatCompletionOptions {
   model?: string;
 }
 
-// Initialize Groq API key from environment variable
-const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY || '';
+// Initialize DeepSeek API key from environment variable
+const apiKey = process.env.NEXT_PUBLIC_DEEPSEEK_API_KEY || '';
 
 // Default model to use
-const DEFAULT_MODEL = 'llama3-70b-8192';
+const DEFAULT_MODEL = 'deepseek-chat';
 
 /**
- * Get chat completion from Groq API
+ * Get chat completion from DeepSeek API
  * @param messages Array of chat messages
  * @param options Options for the API call
  * @returns Promise with the API response
@@ -31,11 +31,16 @@ export async function getChatCompletion(
   options: ChatCompletionOptions = {}
 ) {
   try {
+    // Validate API key
+    if (!apiKey) {
+      throw new Error('DeepSeek API key is not configured. Please set NEXT_PUBLIC_DEEPSEEK_API_KEY in your environment variables.');
+    }
+    
     // Track the start time for performance monitoring
     const startTime = performance.now();
     
     // Make the API call using fetch
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -54,7 +59,7 @@ export async function getChatCompletion(
     
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(`Groq API error: ${errorData.error?.message || response.statusText}`);
+      throw new Error(`DeepSeek API error: ${errorData.error?.message || response.statusText}`);
     }
     
     const data = await response.json();
@@ -64,11 +69,11 @@ export async function getChatCompletion(
     const duration = endTime - startTime;
     
     // Log the performance metrics
-    console.log(`Groq API call completed in ${duration.toFixed(2)}ms`);
+    console.log(`DeepSeek API call completed in ${duration.toFixed(2)}ms`);
     
     // Track the API call in our analytics system
     trackApiCall({
-      type: 'groq',
+      type: 'deepseek',
       model: options.model || DEFAULT_MODEL,
       duration,
       tokens: data.usage?.total_tokens || 0,
@@ -78,11 +83,11 @@ export async function getChatCompletion(
     return data;
   } catch (error) {
     // Log the error
-    console.error('Error calling Groq API:', error);
+    console.error('Error calling DeepSeek API:', error);
     
     // Track the failed API call
     trackApiCall({
-      type: 'groq',
+      type: 'deepseek',
       model: options.model || DEFAULT_MODEL,
       duration: 0,
       tokens: 0,

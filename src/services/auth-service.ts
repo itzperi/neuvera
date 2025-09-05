@@ -86,7 +86,7 @@ class AuthService {
   async login(credentials: LoginCredentials): Promise<AuthState> {
     try {
       // Special case for the specific credentials
-      if (credentials.email === 'neuvera' && credentials.password === '1234@') {
+      if (credentials.email === 'neuvera' && credentials.password === 'neuvera@007') {
         const user = mockUsers.find(u => u.email === 'neuvera');
         if (user) {
           this.currentUser = user;

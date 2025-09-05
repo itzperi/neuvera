@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import LandingPage from "@/components/landing-page";
-import AuthForms from "@/components/auth-forms";
 import ChatbotInterface from "@/components/chatbot-interface";
 import AdminPanel from "@/components/admin-panel";
 import TrackingPixel from "@/components/tracking-pixel";
@@ -33,8 +32,6 @@ function HomePageContent() {
     // Determine current view based on URL
     if (path === "/chat" || view === "chat") {
       setCurrentView("chat");
-    } else if (path === "/auth/signin" || path === "/auth/signup" || view === "auth") {
-      setCurrentView("auth");
     } else if (path === "/admin" || view === "admin") {
       setCurrentView("admin");
     } else {
@@ -77,13 +74,11 @@ function HomePageContent() {
       case "landing":
         router.push("/");
         break;
-      case "auth":
-        router.push("/auth/signin");
-        break;
       case "chat":
         if (!isAuthenticated && !isSignedIn) {
-          setCurrentView("auth");
-          router.push("/auth/signin");
+          // Redirect to landing page where they can sign in/up
+          setCurrentView("landing");
+          router.push("/");
         } else {
           router.push("/chat");
         }
@@ -99,18 +94,10 @@ function HomePageContent() {
   // Render appropriate view based on current state
   const renderCurrentView = () => {
     switch (currentView) {
-      case "auth":
-        return (
-          <AuthForms 
-            onAuthSuccess={handleAuthSuccess}
-            onNavigate={handleNavigation}
-          />
-        );
-      
       case "chat":
         if (!isAuthenticated && !isSignedIn) {
-          setCurrentView("auth");
-          router.push("/auth/signin");
+          setCurrentView("landing");
+          router.push("/");
           return null;
         }
         return (
@@ -125,8 +112,8 @@ function HomePageContent() {
       
       case "admin":
         if ((!isAuthenticated && !isSignedIn) || userRole !== "admin") {
-          setCurrentView("auth");
-          router.push("/auth/signin");
+          setCurrentView("landing");
+          router.push("/");
           return null;
         }
         return (

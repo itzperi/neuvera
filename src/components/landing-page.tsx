@@ -37,28 +37,33 @@ export default function LandingPage({ onNavigate, isAuthenticated, userRole }: L
   const handleAdminAccess = async () => {
     setIsLoading(true);
     try {
-      const result = await authService.login({
-        email: username, // Using username field as email
-        password: password
-      });
-      
-      if (result.isAuthenticated) {
-        toast.success("Admin access granted!");
-        setIsAdminDialogOpen(false);
+      // Check for correct admin credentials
+      if (username === 'neuvera' && password === 'neuvera@007') {
+        const result = await authService.login({
+          email: username,
+          password: password
+        });
         
-        // Store admin authentication in localStorage for persistence
-        localStorage.setItem('adminAuthenticated', 'true');
-        localStorage.setItem('adminLoginTime', Date.now().toString());
-        
-        // Navigate to admin panel
-        onNavigate?.("admin");
-        
-        // If using Next.js router directly
-        if (typeof window !== 'undefined') {
-          window.location.href = '/admin';
+        if (result.isAuthenticated) {
+          toast.success("Admin access granted!");
+          setIsAdminDialogOpen(false);
+          
+          // Store admin authentication in localStorage for persistence
+          localStorage.setItem('adminAuthenticated', 'true');
+          localStorage.setItem('adminLoginTime', Date.now().toString());
+          
+          // Navigate to admin panel
+          onNavigate?.("admin");
+          
+          // If using Next.js router directly
+          if (typeof window !== 'undefined') {
+            window.location.href = '/admin';
+          }
+        } else {
+          toast.error("Authentication failed");
         }
       } else {
-        toast.error(result.error || "Invalid credentials");
+        toast.error("Invalid admin credentials");
       }
     } catch (error) {
       toast.error("Authentication failed");
@@ -67,42 +72,10 @@ export default function LandingPage({ onNavigate, isAuthenticated, userRole }: L
       setIsLoading(false);
     }
   };
-
-  const handleLogoClick = async () => {
-    // Hardcoded admin credentials
-    const adminUsername = 'neuvera';
-    const adminPassword = '1234@';
-    
-    try {
-      // Attempt direct login with hardcoded credentials
-      const result = await authService.login({
-        email: adminUsername,
-        password: adminPassword
-      });
-      
-      if (result.isAuthenticated) {
-        toast.success("Admin access granted!");
-        
-        // Store admin authentication in localStorage for persistence
-        localStorage.setItem('adminAuthenticated', 'true');
-        localStorage.setItem('adminLoginTime', Date.now().toString());
-        
-        // Navigate to admin panel
-        onNavigate?.("admin");
-        
-        // If using Next.js router directly
-        if (typeof window !== 'undefined') {
-          window.location.href = '/admin';
-        }
-      } else {
-        // If direct login fails, show the dialog as fallback
-        setIsAdminDialogOpen(true);
-      }
-    } catch (error) {
-      console.error("Direct admin login failed:", error);
-      // Show dialog as fallback if direct login fails
-      setIsAdminDialogOpen(true);
-    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+  const handleLogoClick = () => {
+    // Show admin login dialog when logo is clicked
+    setIsAdminDialogOpen(true);
   };
 
   return (
@@ -255,13 +228,24 @@ export default function LandingPage({ onNavigate, isAuthenticated, userRole }: L
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                onClick={handleTryNeuvera}
-                size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg"
-              >
-                {isAuthenticated ? "Open Chat" : "Try Neuvera"}
-              </Button>
+              {isAuthenticated || isSignedIn ? (
+                <Button 
+                  onClick={handleTryNeuvera}
+                  size="lg" 
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg"
+                >
+                  Open Chat
+                </Button>
+              ) : (
+                <SignInButton mode="modal">
+                  <Button 
+                    size="lg" 
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg"
+                  >
+                    Try Neuvera
+                  </Button>
+                </SignInButton>
+              )}
               <Button asChild variant="outline" size="lg" className="border-border hover:bg-secondary text-foreground px-8 py-3 text-lg">
                 <Link href="#features">Learn More</Link>
               </Button>
@@ -325,13 +309,24 @@ export default function LandingPage({ onNavigate, isAuthenticated, userRole }: L
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands of students and professionals who have revolutionized their approach to complex tasks with Neuvera.ai.
           </p>
-          <Button 
-            onClick={handleTryNeuvera}
-            size="lg" 
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg"
-          >
-            {isAuthenticated ? "Open Chat" : "Get Started Now"}
-          </Button>
+          {isAuthenticated || isSignedIn ? (
+            <Button 
+              onClick={handleTryNeuvera}
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg"
+            >
+              Open Chat
+            </Button>
+          ) : (
+            <SignInButton mode="modal">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg"
+              >
+                Get Started Now
+              </Button>
+            </SignInButton>
+          )}
         </div>
       </section>
 
@@ -416,6 +411,9 @@ export default function LandingPage({ onNavigate, isAuthenticated, userRole }: L
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Admin Access</DialogTitle>
+            <p className="text-sm text-muted-foreground">
+              Enter admin credentials to access the admin panel
+            </p>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-4">
@@ -424,7 +422,7 @@ export default function LandingPage({ onNavigate, isAuthenticated, userRole }: L
                   <Label htmlFor="username">Username</Label>
                   <Input
                     id="username"
-                    placeholder="Enter your username"
+                    placeholder="Enter admin username"
                     autoComplete="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -435,12 +433,15 @@ export default function LandingPage({ onNavigate, isAuthenticated, userRole }: L
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="Enter admin password"
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
+              </div>
+              <div className="text-xs text-muted-foreground text-center">
+                Admin credentials: <span className="font-mono">neuvera</span> / <span className="font-mono">neuvera@007</span>
               </div>
               <div className="flex gap-2">
                 <Button 
